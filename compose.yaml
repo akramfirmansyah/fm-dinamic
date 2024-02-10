@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # client:
+  #   container_name: client
+  #   image: fm-dinamic
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   develop:
+  #     watch:
+  #       - path: ./client/package.json
+  #         action: rebuild
+  #       - path: ./client/package-lock.json
+  #         action: rebuild
+  #       - path: ./client/
+  #         action: sync
+  #         ignore:
+  #           - node_modules/
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=http://localhost:8080
+  #   depends_on:
+  #     - server
+
+  server:
+    container_name: server
+    image: "fm-dinamic-api:${TAG}"
+    command: go run ./main.go
+    build:
+      context: ./server
+      dockerfile: server.Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: ./server
+    environment:
+      - DB_URL='host=localhost user=postgres password=postgres dbname=fm port=5430 sslmode=disable'
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    depends_on:
+      - db
+
+  db: 
+    container_name: db
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fm
+    ports:
+      - "5430:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
