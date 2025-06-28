@@ -8,6 +8,6 @@ RUN go mod download && go mod verify
 
 COPY . .
 
-RUN go build -v -o /usr/local/bin/fm-dinamic-api ./...
+RUN go build -v -o /go/src/app/bin/fm-dynamic-api
 
-CMD [ "fm-dinamic-api" ]
+CMD [ "/go/src/app/bin/fm-dynamic-api" ]

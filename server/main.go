@@ -2,6 +2,7 @@ package main
 
 import (
 	"akramfirmansyah/fm-dinamic-api/controllers"
+	"akramfirmansyah/fm-dinamic-api/database"
 	"akramfirmansyah/fm-dinamic-api/routers"
 	"akramfirmansyah/fm-dinamic-api/utils"
 	"os"
@@ -16,8 +17,8 @@ import (
 
 func init() {
 	utils.LoadEnv()
-	ConnectDatabase()
-	Migrate()
+	database.ConnectDatabase()
+	database.Migrate()
 }
 
 func main() {
